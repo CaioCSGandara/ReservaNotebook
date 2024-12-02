@@ -28,6 +28,6 @@ let reserva = {
 
 //await mongo.alterReserva("927364810", "email", "maria@puc.com");
 
-await mongo.deleteReserva("927364810");
+//await mongo.deleteReserva("927364810");
 
 console.log(await mongo.getAllReservas());

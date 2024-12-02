@@ -1,8 +1,6 @@
 import mongodb from 'mongodb';
-import dotenv from 'dotenv';
 
-dotenv.config();
-
+const MONGO_URI = process.env.MONGO_URI; 
 
 async function getAllReservas() {
 
@@ -10,7 +8,7 @@ async function getAllReservas() {
 
     try {
 
-    client = new mongodb.MongoClient(process.env.MONGO_URI);
+    client = new mongodb.MongoClient(MONGO_URI);
 
     await client.connect();
 
@@ -36,7 +34,7 @@ async function addReserva(reserva) {
     
     try {
 
-        let client = new mongodb.MongoClient(process.env.MONGO_URI);
+        let client = new mongodb.MongoClient(MONGO_URI);
     
         await client.connect();
     
@@ -64,7 +62,7 @@ async function alterReserva(ra, field, newValue) {
 
     try {
 
-        client = new mongodb.MongoClient(process.env.MONGO_URI);
+        client = new mongodb.MongoClient(MONGO_URI);
     
         await client.connect();
     
@@ -92,7 +90,7 @@ async function deleteReserva(ra) {
 
     try {
 
-        client = new mongodb.MongoClient(process.env.MONGO_URI);
+        client = new mongodb.MongoClient(MONGO_URI);
     
         await client.connect();
     
