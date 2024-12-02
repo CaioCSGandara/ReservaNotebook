@@ -3,7 +3,7 @@ import mongo from './database/mongo.js';
 
 const app = express();
 
-app.get('/', async (req, res) => {
+app.get('/listarReservas', async (req, res) => {
 
     try {
 
@@ -23,14 +23,12 @@ app.get('/', async (req, res) => {
 
 app.use(express.json());
 
-app.post('/', async (req, res) => {
+app.post('/add', async (req, res) => {
 
     try {
         let reserva = req.body;
 
-        console.log(req.body);
-
-        await mongo.addReserva(reserva); //validação será feita na interface
+        await mongo.addReserva(reserva);
 
         res.status(201).send();
     }
@@ -38,7 +36,46 @@ app.post('/', async (req, res) => {
         console.log("Erro no servidor: " + error);
         res.status(500).send("Ocorreu um erro no servidor. Tente novamente mais tarde.");
     }
-})
+});
+
+
+app.put('/alterar/:ra/:field/:newValue', async (req, res) => {
+    
+    try{
+        let ra = req.params.ra;
+        let field = req.params.field;
+        let newValue = req.params.newValue;
+    
+        await mongo.alterReserva(ra, field, newValue);
+            //there is no need to sent a res code if the ra is not found, because
+            //the ra will be taken from the interface's table (built with get requestion)
+
+        res.status(200).send();
+    }
+    catch(error) {
+        console.log("Erro no servidor: " + error);
+        res.status(500).send("Ocorreu um erro no servidor. Tente novamente mais tarde.");
+    }
+});
+
+
+app.delete('/deletar/:ra', async (req, res) => {
+
+    try {
+            let ra = req.params.ra;
+
+            await mongo.deleteReserva(ra);
+
+            //there is no need to sent a res code if the ra is not found, because
+            //the ra will be taken from the interface's table (built with get requestion)
+
+            res.status(200).send();
+    }
+    catch(error) {
+        console.log("Erro no servidor: " + error);
+        res.status(500).send("Ocorreu um erro no servidor. Tente novamente mais tarde.");
+    }
+});
 
 
 
