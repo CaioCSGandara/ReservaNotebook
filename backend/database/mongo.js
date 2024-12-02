@@ -93,7 +93,7 @@ async function deleteReserva(ra) {
         client = new mongodb.MongoClient(MONGO_URI);
     
         await client.connect();
-    
+
         await client.db("puc").collection("reserva").deleteOne({"ra": ra});
     
         await client.close();
