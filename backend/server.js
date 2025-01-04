@@ -1,7 +1,9 @@
 import express from 'express';
 import mongo from './database/mongo.js';
+import cors from 'cors';
 
 const app = express();
+app.use(cors());
 
 app.get('/listarReservas', async (req, res) => {
 
