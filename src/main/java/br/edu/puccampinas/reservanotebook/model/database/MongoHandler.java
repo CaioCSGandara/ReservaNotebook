@@ -1,4 +1,4 @@
-package br.edu.puccampinas.reservanotebook.model;
+package br.edu.puccampinas.reservanotebook.model.database;
 import com.mongodb.client.*;
 import io.github.cdimascio.dotenv.Dotenv;
 
