@@ -1,20 +1,32 @@
 package br.edu.puccampinas.reservanotebook.model.entities;
 
 
+import org.bson.types.ObjectId;
+
 import java.util.Map;
 
 public class Notebook {
+    private ObjectId id;
     private String modelo;
     private String patrimonio;
     private Map<String, Integer> historicoUso;
     private boolean emUso;
 
-    public Notebook(String modelo, String patrimonio, Map<String, Integer> historicoUso, boolean emUso) {
+    public Notebook(ObjectId id, String modelo, String patrimonio, Map<String, Integer> historicoUso, boolean emUso) {
         //todo: validação dos campos
+        this.id = id;
         this.modelo = modelo;
         this.patrimonio = patrimonio;
         this.historicoUso = historicoUso;
         this.emUso = emUso;
+    }
+
+    public ObjectId getId() {
+        return id;
+    }
+
+    public void setId(ObjectId id) {
+        this.id = id;
     }
 
     public String getModelo() {
