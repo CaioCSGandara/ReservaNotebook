@@ -1,12 +1,8 @@
 package br.edu.puccampinas.reservanotebook.model.entities;
-
 import br.edu.puccampinas.reservanotebook.model.entities.enums.Curso;
-import org.bson.types.ObjectId;
-
 import java.time.ZonedDateTime;
 
 public class Aluno {
-    private ObjectId id;
     private String nome;
     private String ra;
     private String email;
@@ -15,9 +11,8 @@ public class Aluno {
     private int qtdReservas;
     private ZonedDateTime ultimaReserva;
 
-    public Aluno(ObjectId id, String nome, String ra, String email, String telefone, Curso curso, int qtdReservas, ZonedDateTime ultimaReserva) {
+    public Aluno(String nome, String ra, String email, String telefone, Curso curso, int qtdReservas, ZonedDateTime ultimaReserva) {
         //todo: fazer validação
-        this.id = id;
         this.nome = nome;
         this.ra = ra;
         this.email = email;
@@ -25,14 +20,6 @@ public class Aluno {
         this.curso = curso;
         this.qtdReservas = qtdReservas;
         this.ultimaReserva = ultimaReserva;
-    }
-
-    public ObjectId getId() {
-        return id;
-    }
-
-    public void setId(ObjectId id) {
-        this.id = id;
     }
 
     public String getNome() {
