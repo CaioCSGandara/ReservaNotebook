@@ -9,14 +9,18 @@ public class MongoHandler {
     private final static String MONGO_URI = dotenv.get("MONGO_URI");
     private final static String DB_NAME = "puc";
 
-    public static MongoClient connect() throws Exception {
+    public static MongoClient connect()  {
         try {
             return MongoClients.create(MONGO_URI);
         }
-        catch (Exception e) {
+        catch (RuntimeException e) {
             e.printStackTrace();
-            throw new Exception(e.getMessage());
+            throw new RuntimeException("Erro interno no servidor. Tente novamente mais tarde", e);
         }
+    }
+
+    public static String getDbName() {
+        return DB_NAME;
     }
 }
 

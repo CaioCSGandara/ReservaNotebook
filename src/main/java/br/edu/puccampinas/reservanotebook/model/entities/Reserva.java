@@ -30,7 +30,7 @@ public class Reserva {
         this.aluno.put("ra", aluno.getRa());
         this.aluno.put("email", aluno.getEmail());
         this.aluno.put("telefone", aluno.getTelefone());
-        this.aluno.put("curso", aluno.getCurso().getNomeFormatado());
+        this.aluno.put("curso", aluno.getCurso());
     }
 
     public Map<String, String> getNotebook() {

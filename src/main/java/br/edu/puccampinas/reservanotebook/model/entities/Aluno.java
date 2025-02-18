@@ -1,17 +1,21 @@
 package br.edu.puccampinas.reservanotebook.model.entities;
-import br.edu.puccampinas.reservanotebook.model.entities.enums.Curso;
-import java.time.ZonedDateTime;
+import org.bson.types.ObjectId;
+
+import java.time.LocalDateTime;
+
+
 
 public class Aluno {
     private String nome;
     private String ra;
     private String email;
     private String telefone;
-    private Curso curso;
-    private int qtdReservas;
-    private ZonedDateTime ultimaReserva;
+    private String curso;
+    private Integer qtdReservas;
+    private LocalDateTime ultimoLogin;
+    private LocalDateTime atualizadoEm;
 
-    public Aluno(String nome, String ra, String email, String telefone, Curso curso, int qtdReservas, ZonedDateTime ultimaReserva) {
+    public Aluno(String nome, String ra, String email, String telefone, String curso, Integer qtdReservas, LocalDateTime ultimoLogin, LocalDateTime atualizadoEm) {
         //todo: fazer validação
         this.nome = nome;
         this.ra = ra;
@@ -19,8 +23,11 @@ public class Aluno {
         this.telefone = telefone;
         this.curso = curso;
         this.qtdReservas = qtdReservas;
-        this.ultimaReserva = ultimaReserva;
+        this.ultimoLogin = ultimoLogin;
+        this.atualizadoEm = atualizadoEm;
     }
+
+    public Aluno() {};
 
     public String getNome() {
         return nome;
@@ -54,29 +61,55 @@ public class Aluno {
         this.telefone = telefone;
     }
 
-    public Curso getCurso() {
+    public String getCurso() {
         return curso;
     }
 
-    public void setCurso(Curso curso) {
+    public void setCurso(String curso) {
         this.curso = curso;
     }
 
-    public int getQtdReservas() {
+    public Integer getQtdReservas() {
         return qtdReservas;
     }
 
-    public void setQtdReservas(int qtdReservas) {
+    public void setQtdReservas(Integer qtdReservas) {
         this.qtdReservas = qtdReservas;
     }
 
-    public ZonedDateTime getUltimaReserva() {
-        return ultimaReserva;
+
+    public LocalDateTime getUltimoLogin() {
+        return ultimoLogin;
     }
 
-    public void setUltimaReserva(ZonedDateTime ultimaReserva) {
-        this.ultimaReserva = ultimaReserva;
+    public LocalDateTime getAtualizadoEm() {
+        return atualizadoEm;
+    }
+
+    public void setAtualizadoEm(LocalDateTime atualizadoEm) {
+        this.atualizadoEm = atualizadoEm;
+    }
+
+    public void setUltimoLogin(LocalDateTime ultimoLogin) {
+        this.ultimoLogin = ultimoLogin;
     }
 
     //todo: reescrever métodos obrigatórios
+
+
+    @Override
+    public String toString() {
+        return "Aluno{" +
+                "nome='" + nome + '\'' +
+                ", ra='" + ra + '\'' +
+                ", email='" + email + '\'' +
+                ", telefone='" + telefone + '\'' +
+                ", curso='" + curso + '\'' +
+                ", qtdReservas=" + qtdReservas +
+                ", ultimoLogin=" + ultimoLogin +
+                ", atualizadoEm=" + atualizadoEm +
+                '}';
+    }
+
+
 }
