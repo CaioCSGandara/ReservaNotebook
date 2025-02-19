@@ -4,7 +4,8 @@ import br.edu.puccampinas.reservanotebook.model.conversor.AlunoConversor;
 import br.edu.puccampinas.reservanotebook.model.database.CRUD;
 import br.edu.puccampinas.reservanotebook.model.database.MongoHandler;
 import br.edu.puccampinas.reservanotebook.model.entities.Aluno;
-import com.mongodb.MongoException;
+import br.edu.puccampinas.reservanotebook.model.exceptions.RegistroNaoEncontradoException;
+import br.edu.puccampinas.reservanotebook.model.exceptions.ValidacaoException;
 import com.mongodb.client.MongoClient;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
@@ -25,100 +26,81 @@ public class AlunoRepository implements CRUD<Aluno> {
     @Override
     public void create(Aluno obj) {
 
-        try(MongoClient client = MongoHandler.connect())
-        {
+        if (obj == null) throw new IllegalArgumentException("Parâmetro 'obj' (aluno) não pode ser nulo (create).");
+        if(findByRa(obj.getRa())!=null) throw new ValidacaoException("Este RA já foi cadastrado");
+
+        try (MongoClient client = MongoHandler.connect()) {
             MongoDatabase db = client.getDatabase(MongoHandler.getDbName());
             MongoCollection<Document> collection = db.getCollection("alunos");
             Document document = AlunoConversor.alunoToDocument(obj);
             InsertOneResult result = collection.insertOne(document);
 
-            System.out.printf("Aluno registrado com _id: " + result.getInsertedId());
-        }
-        catch (MongoException e) {
-            e.printStackTrace();
-            throw new MongoException("Erro ao cadastrar novo aluno.", e);
-
-        }
-        catch (RuntimeException e) {
-            e.printStackTrace();
-            throw new RuntimeException("Erro interno no servidor. Tente novamente mais tarde.", e);
+            System.out.println("Aluno registrado com _id: " + result.getInsertedId());
         }
     }
 
     @Override
     public ArrayList<Aluno> findAll() {
         ArrayList<Aluno> listaAlunos = new ArrayList<>();
-        try(MongoClient client = MongoHandler.connect()) {
+        try (MongoClient client = MongoHandler.connect()) {
             MongoDatabase db = client.getDatabase(MongoHandler.getDbName());
             Bson excludeIdProjection = Projections.excludeId();
-            MongoCollection<Document> collection= db.getCollection("alunos");
-            for(Document document: collection.find().projection(excludeIdProjection)) {
+            MongoCollection<Document> collection = db.getCollection("alunos");
+            for (Document document : collection.find().projection(excludeIdProjection)) {
                 listaAlunos.add(AlunoConversor.documentToAluno(document));
-                System.out.println(document.toJson());
             }
-        }
-        catch(MongoException e) {
-            e.printStackTrace();
-            throw new RuntimeException("Erro ao exibir alunos", e);
-        }
-        catch(RuntimeException e) {
-            e.printStackTrace();
-            throw new RuntimeException("Erro interno no servidor. Tente novamente mais tarde.", e);
         }
         return listaAlunos;
     }
 
     @Override
-    public void update(Aluno obj) {
-        try(MongoClient client = MongoHandler.connect()) {
+    public void update(String query, Aluno obj) {
+        if(obj==null) throw new IllegalArgumentException("Parâmetro 'obj' (aluno) não pode ser nulo (update).");
+        if(query.isEmpty()) throw new IllegalArgumentException("Parâmetro 'query' não pode ser nulo (update).");
+
+        try (MongoClient client = MongoHandler.connect()) {
             MongoDatabase db = client.getDatabase(MongoHandler.getDbName());
             MongoCollection<Document> collection = db.getCollection("alunos");
 
             Bson updates = Updates.combine(
                     Updates.set("nome", obj.getNome()),
-                    Updates.set("ra", obj.getRa()),
-                    Updates.set("email", obj.getEmail()),
                     Updates.set("telefone", obj.getTelefone()),
                     Updates.set("curso", obj.getCurso()),
                     Updates.set("atualizadoEm", LocalDateTime.now()));
 
-            UpdateResult result = collection.updateOne(eq("ra", obj.getRa()), updates);
+            UpdateResult result = collection.updateOne(eq("ra", query), updates);
             System.out.println("Documentos encontrados: " + result.getMatchedCount() + ", documentos alterados: " + result.getModifiedCount());
+            if(result.getModifiedCount() == 0) throw new RegistroNaoEncontradoException("Não foi possível alterar o aluno de ra " + query + ": Registro não encontrado.");
         }
-        catch (MongoException e) {
-            e.printStackTrace();
-        }
-        }
+    }
 
 
     @Override
-    public void delete(String id) {
-        try(MongoClient client = MongoHandler.connect()) {
+    public void delete(String query) {
+        if(query==null) throw new IllegalArgumentException("Parâmetro 'id' (RA) não pode ser nulo (delete).");
+        try (MongoClient client = MongoHandler.connect()) {
             MongoDatabase db = client.getDatabase(MongoHandler.getDbName());
             MongoCollection<Document> collection = db.getCollection("alunos");
-            DeleteResult result = collection.deleteOne(eq("ra", id));
-            System.out.println("Documento(s) deletado(s) na tabela alunos: " + result.getDeletedCount());
+
+            DeleteResult result = collection.deleteOne(eq("ra", query));
+            System.out.println("Documentos encontrados: " + result.getDeletedCount());
+            if (result.getDeletedCount()==0) throw new RegistroNaoEncontradoException("Não foi possível deletar o aluno de ra " + query + ": Registro não encontrado.");
         }
 
     }
 
     public Aluno findByRa(String ra) {
-        try(MongoClient client = MongoHandler.connect()) {
+        if(ra==null) throw new IllegalArgumentException("Parâmetro 'ra' não pode ser nulo na classe Aluno: função findByRa");
+        try (MongoClient client = MongoHandler.connect()) {
             MongoDatabase db = client.getDatabase(MongoHandler.getDbName());
             Bson excludeIdProjection = Projections.excludeId();
             Document document = db.getCollection("alunos").find(eq("ra", ra)).projection(excludeIdProjection).first();
+
+            if(document==null) return null;
+
             return AlunoConversor.documentToAluno(document);
         }
-        catch (NullPointerException e) {
-            e.printStackTrace();
-            throw new NullPointerException("Busca por RA não encontrou nenhum aluno.");
-
-        }
-        catch (RuntimeException e) {
-            e.printStackTrace();
-            throw new RuntimeException("Erro interno no servidor. Tente novamente mais tarde.", e);
-
-        }
     }
+
 
 }

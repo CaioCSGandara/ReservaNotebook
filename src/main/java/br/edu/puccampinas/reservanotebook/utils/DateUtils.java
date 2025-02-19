@@ -6,13 +6,12 @@ import java.util.Date;
 public class DateUtils {
 
     public static LocalDateTime dateToLocalDateTime(Date date) {
-        try {
-            OffsetDateTime utc = Instant.ofEpochMilli(date.getTime()).atOffset(ZoneOffset.of("+00:00"));
-            return utc.toLocalDateTime();
-        }
-        catch (DateTimeException e) {
-            throw e;
-        }
+
+        if(date==null) throw new IllegalArgumentException("Parâmetro 'date não pode ser nulo");
+
+        OffsetDateTime utc = Instant.ofEpochMilli(date.getTime()).atOffset(ZoneOffset.of("+00:00"));
+        return utc.toLocalDateTime();
+
 
     }
 }

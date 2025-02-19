@@ -10,18 +10,16 @@ public class Aluno implements Cloneable{
     private String email;
     private String telefone;
     private String curso;
-    private Integer qtdReservas;
     private LocalDateTime ultimoLogin;
     private LocalDateTime atualizadoEm;
 
-    //todo: 2-exceções, 3-validação, 4-testes
-    public Aluno(String nome, String ra, String email, String telefone, String curso, Integer qtdReservas, LocalDateTime ultimoLogin, LocalDateTime atualizadoEm) {
+    //todo: 1-validação, 2-testes, 3-documentação
+    public Aluno(String nome, String ra, String email, String telefone, String curso, LocalDateTime ultimoLogin, LocalDateTime atualizadoEm) {
         this.nome = nome;
         this.ra = ra;
         this.email = email;
         this.telefone = telefone;
         this.curso = curso;
-        this.qtdReservas = qtdReservas;
         this.ultimoLogin = ultimoLogin;
         this.atualizadoEm = atualizadoEm;
     }
@@ -67,14 +65,6 @@ public class Aluno implements Cloneable{
         this.curso = curso;
     }
 
-    public Integer getQtdReservas() {
-        return qtdReservas;
-    }
-
-    public void setQtdReservas(Integer qtdReservas) {
-        this.qtdReservas = qtdReservas;
-    }
-
 
     public LocalDateTime getUltimoLogin() {
         return ultimoLogin;
@@ -103,7 +93,6 @@ public class Aluno implements Cloneable{
                 ", email='" + email + '\'' +
                 ", telefone='" + telefone + '\'' +
                 ", curso='" + curso + '\'' +
-                ", qtdReservas=" + qtdReservas +
                 ", ultimoLogin=" + ultimoLogin +
                 ", atualizadoEm=" + atualizadoEm +
                 '}';
@@ -113,12 +102,12 @@ public class Aluno implements Cloneable{
     public boolean equals(Object o) {
         if (o == null || getClass() != o.getClass()) return false;
         Aluno aluno = (Aluno) o;
-        return Objects.equals(nome, aluno.nome) && Objects.equals(ra, aluno.ra) && Objects.equals(email, aluno.email) && Objects.equals(telefone, aluno.telefone) && Objects.equals(curso, aluno.curso) && Objects.equals(qtdReservas, aluno.qtdReservas) && Objects.equals(ultimoLogin, aluno.ultimoLogin) && Objects.equals(atualizadoEm, aluno.atualizadoEm);
+        return Objects.equals(nome, aluno.nome) && Objects.equals(ra, aluno.ra) && Objects.equals(email, aluno.email) && Objects.equals(telefone, aluno.telefone) && Objects.equals(curso, aluno.curso) && Objects.equals(ultimoLogin, aluno.ultimoLogin) && Objects.equals(atualizadoEm, aluno.atualizadoEm);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(nome, ra, email, telefone, curso, qtdReservas, ultimoLogin, atualizadoEm);
+        return Objects.hash(nome, ra, email, telefone, curso, ultimoLogin, atualizadoEm);
     }
 
     public Aluno(Aluno aluno) {
@@ -128,7 +117,6 @@ public class Aluno implements Cloneable{
         this.telefone = aluno.getTelefone();
         this.curso = aluno.getCurso();
         this.curso = aluno.getCurso();
-        this.qtdReservas = aluno.getQtdReservas();
         this.ultimoLogin = aluno.getUltimoLogin();
         this.atualizadoEm = aluno.getAtualizadoEm();
     }
