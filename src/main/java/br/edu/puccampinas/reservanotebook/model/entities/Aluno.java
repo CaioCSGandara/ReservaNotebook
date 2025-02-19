@@ -116,7 +116,6 @@ public class Aluno implements Cloneable{
         this.email = aluno.getEmail();
         this.telefone = aluno.getTelefone();
         this.curso = aluno.getCurso();
-        this.curso = aluno.getCurso();
         this.ultimoLogin = aluno.getUltimoLogin();
         this.atualizadoEm = aluno.getAtualizadoEm();
     }
