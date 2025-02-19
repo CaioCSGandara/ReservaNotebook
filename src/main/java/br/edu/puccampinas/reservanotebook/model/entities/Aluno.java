@@ -1,11 +1,10 @@
 package br.edu.puccampinas.reservanotebook.model.entities;
-import org.bson.types.ObjectId;
 
 import java.time.LocalDateTime;
+import java.util.Objects;
 
 
-
-public class Aluno {
+public class Aluno implements Cloneable{
     private String nome;
     private String ra;
     private String email;
@@ -15,8 +14,8 @@ public class Aluno {
     private LocalDateTime ultimoLogin;
     private LocalDateTime atualizadoEm;
 
+    //todo: 2-exceções, 3-validação, 4-testes
     public Aluno(String nome, String ra, String email, String telefone, String curso, Integer qtdReservas, LocalDateTime ultimoLogin, LocalDateTime atualizadoEm) {
-        //todo: fazer validação
         this.nome = nome;
         this.ra = ra;
         this.email = email;
@@ -27,7 +26,6 @@ public class Aluno {
         this.atualizadoEm = atualizadoEm;
     }
 
-    public Aluno() {};
 
     public String getNome() {
         return nome;
@@ -111,5 +109,42 @@ public class Aluno {
                 '}';
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (o == null || getClass() != o.getClass()) return false;
+        Aluno aluno = (Aluno) o;
+        return Objects.equals(nome, aluno.nome) && Objects.equals(ra, aluno.ra) && Objects.equals(email, aluno.email) && Objects.equals(telefone, aluno.telefone) && Objects.equals(curso, aluno.curso) && Objects.equals(qtdReservas, aluno.qtdReservas) && Objects.equals(ultimoLogin, aluno.ultimoLogin) && Objects.equals(atualizadoEm, aluno.atualizadoEm);
+    }
 
+    @Override
+    public int hashCode() {
+        return Objects.hash(nome, ra, email, telefone, curso, qtdReservas, ultimoLogin, atualizadoEm);
+    }
+
+    public Aluno(Aluno aluno) {
+        this.nome = aluno.getNome();
+        this.ra = aluno.getRa();
+        this.email = aluno.getEmail();
+        this.telefone = aluno.getTelefone();
+        this.curso = aluno.getCurso();
+        this.curso = aluno.getCurso();
+        this.qtdReservas = aluno.getQtdReservas();
+        this.ultimoLogin = aluno.getUltimoLogin();
+        this.atualizadoEm = aluno.getAtualizadoEm();
+    }
+
+
+    @Override
+    public Object clone() {
+        Aluno copia = null;
+        try {
+            copia = new Aluno(this);
+
+        } catch (RuntimeException e) {
+            e.printStackTrace();
+        }
+        return copia;
+    }
 }
+
+
