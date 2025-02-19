@@ -1,7 +1,7 @@
 package br.edu.puccampinas.reservanotebook.model.conversor;
 
 import br.edu.puccampinas.reservanotebook.model.entities.Aluno;
-import br.edu.puccampinas.reservanotebook.model.repository.AlunoRepository;
+import br.edu.puccampinas.reservanotebook.model.entities.enums.Curso;
 import br.edu.puccampinas.reservanotebook.utils.DateUtils;
 import org.bson.Document;
 
@@ -18,7 +18,7 @@ public class AlunoConversor {
                 .append("ra", aluno.getRa())
                 .append("email", aluno.getEmail())
                 .append("telefone", aluno.getTelefone())
-                .append("curso", aluno.getCurso())
+                .append("curso", aluno.getCurso().getNomeFormatado())
                 .append("ultimoLogin", aluno.getUltimoLogin())
                 .append("atualizadoEm", aluno.getAtualizadoEm());
     }
@@ -32,7 +32,7 @@ public class AlunoConversor {
                 (String)document.get("ra"),
                 (String)document.get("email"),
                 (String)document.get("telefone"),
-                (String)document.get("curso"),
+                Curso.valueOf((String)document.get("curso")),
                 DateUtils.dateToLocalDateTime(((Date)document.get("ultimoLogin"))),
                 DateUtils.dateToLocalDateTime(((Date)document.get("atualizadoEm"))));
     }

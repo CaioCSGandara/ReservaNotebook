@@ -1,5 +1,8 @@
 package br.edu.puccampinas.reservanotebook.model.entities;
 
+import br.edu.puccampinas.reservanotebook.model.entities.enums.Curso;
+import br.edu.puccampinas.reservanotebook.model.validators.AlunoValidator;
+
 import java.time.LocalDateTime;
 import java.util.Objects;
 
@@ -9,12 +12,13 @@ public class Aluno implements Cloneable{
     private String ra;
     private String email;
     private String telefone;
-    private String curso;
+    private Curso curso;
     private LocalDateTime ultimoLogin;
     private LocalDateTime atualizadoEm;
 
-    //todo: 1-validação, 2-testes, 3-documentação
-    public Aluno(String nome, String ra, String email, String telefone, String curso, LocalDateTime ultimoLogin, LocalDateTime atualizadoEm) {
+    //todo: 2-testes, 3-documentação
+    public Aluno(String nome, String ra, String email, String telefone, Curso curso, LocalDateTime ultimoLogin, LocalDateTime atualizadoEm) {
+        AlunoValidator.validarAluno(nome, ra, email, telefone, curso);
         this.nome = nome;
         this.ra = ra;
         this.email = email;
@@ -22,6 +26,7 @@ public class Aluno implements Cloneable{
         this.curso = curso;
         this.ultimoLogin = ultimoLogin;
         this.atualizadoEm = atualizadoEm;
+
     }
 
 
@@ -57,11 +62,11 @@ public class Aluno implements Cloneable{
         this.telefone = telefone;
     }
 
-    public String getCurso() {
+    public Curso getCurso() {
         return curso;
     }
 
-    public void setCurso(String curso) {
+    public void setCurso(Curso curso) {
         this.curso = curso;
     }
 
@@ -82,8 +87,6 @@ public class Aluno implements Cloneable{
         this.ultimoLogin = ultimoLogin;
     }
 
-    //todo: reescrever métodos obrigatórios
-
 
     @Override
     public String toString() {
@@ -92,7 +95,7 @@ public class Aluno implements Cloneable{
                 ", ra='" + ra + '\'' +
                 ", email='" + email + '\'' +
                 ", telefone='" + telefone + '\'' +
-                ", curso='" + curso + '\'' +
+                ", curso='" + curso.getNomeFormatado() + '\'' +
                 ", ultimoLogin=" + ultimoLogin +
                 ", atualizadoEm=" + atualizadoEm +
                 '}';

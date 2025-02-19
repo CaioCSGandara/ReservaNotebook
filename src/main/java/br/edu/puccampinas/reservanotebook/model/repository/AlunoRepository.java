@@ -5,7 +5,6 @@ import br.edu.puccampinas.reservanotebook.model.database.CRUD;
 import br.edu.puccampinas.reservanotebook.model.database.MongoHandler;
 import br.edu.puccampinas.reservanotebook.model.entities.Aluno;
 import br.edu.puccampinas.reservanotebook.model.exceptions.RegistroNaoEncontradoException;
-import br.edu.puccampinas.reservanotebook.model.exceptions.ValidacaoException;
 import com.mongodb.client.MongoClient;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
@@ -27,7 +26,7 @@ public class AlunoRepository implements CRUD<Aluno> {
     public void create(Aluno obj) {
 
         if (obj == null) throw new IllegalArgumentException("Parâmetro 'obj' (aluno) não pode ser nulo (create).");
-        if(findByRa(obj.getRa())!=null) throw new ValidacaoException("Este RA já foi cadastrado");
+        if(findByRa(obj.getRa())!=null) throw new RegistroNaoEncontradoException("Este RA já foi cadastrado");
 
         try (MongoClient client = MongoHandler.connect()) {
             MongoDatabase db = client.getDatabase(MongoHandler.getDbName());
@@ -55,7 +54,7 @@ public class AlunoRepository implements CRUD<Aluno> {
 
     @Override
     public void update(String query, Aluno obj) {
-        if(obj==null) throw new IllegalArgumentException("Parâmetro 'obj' (aluno) não pode ser nulo (update).");
+        if(obj==null) throw new IllegalArgumentException("Parâmetro 'obj' não pode ser nulo (update).");
         if(query.isEmpty()) throw new IllegalArgumentException("Parâmetro 'query' não pode ser nulo (update).");
 
         try (MongoClient client = MongoHandler.connect()) {
@@ -70,7 +69,7 @@ public class AlunoRepository implements CRUD<Aluno> {
 
             UpdateResult result = collection.updateOne(eq("ra", query), updates);
             System.out.println("Documentos encontrados: " + result.getMatchedCount() + ", documentos alterados: " + result.getModifiedCount());
-            if(result.getModifiedCount() == 0) throw new RegistroNaoEncontradoException("Não foi possível alterar o aluno de ra " + query + ": Registro não encontrado.");
+            if(result.getModifiedCount() == 0) throw new RegistroNaoEncontradoException("RA para alterar documento não encontrado.");
         }
     }
 
@@ -84,7 +83,7 @@ public class AlunoRepository implements CRUD<Aluno> {
 
             DeleteResult result = collection.deleteOne(eq("ra", query));
             System.out.println("Documentos encontrados: " + result.getDeletedCount());
-            if (result.getDeletedCount()==0) throw new RegistroNaoEncontradoException("Não foi possível deletar o aluno de ra " + query + ": Registro não encontrado.");
+            if (result.getDeletedCount()==0) throw new RegistroNaoEncontradoException("RA para deletar documento não encontrado.");
         }
 
     }
