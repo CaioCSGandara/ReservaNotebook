@@ -6,6 +6,6 @@ import java.util.List;
 public interface CRUD<T> {
     void create(T obj);
     ArrayList<T> findAll();
-    void update(String query, T obj);
+    void update(T obj);
     void delete(String query);
 }

@@ -24,7 +24,15 @@ public enum Curso {
         return nomeFormatado;
     }
 
-    public void setNomeFormatado(String nomeFormatado) {
-        this.nomeFormatado = nomeFormatado;
+    public static Curso encontrarCursoPorString(String nome) {
+        for(Curso c : Curso.values()) {
+            if (c.getNomeFormatado().equals(nome)) {
+                return c;
+            }
+        }
+
+        throw new IllegalArgumentException("Curso não encontrado na lista.");
     }
+
+
 }

@@ -27,12 +27,13 @@ public class AlunoConversor {
 
         if(document==null) throw new IllegalArgumentException("Parâmetro 'document' não pode ser nulo (documentToAluno).");
 
+
         return new Aluno(
                 (String)document.get("nome"),
                 (String)document.get("ra"),
                 (String)document.get("email"),
                 (String)document.get("telefone"),
-                Curso.valueOf((String)document.get("curso")),
+                Curso.encontrarCursoPorString((String)document.get("curso")),
                 DateUtils.dateToLocalDateTime(((Date)document.get("ultimoLogin"))),
                 DateUtils.dateToLocalDateTime(((Date)document.get("atualizadoEm"))));
     }

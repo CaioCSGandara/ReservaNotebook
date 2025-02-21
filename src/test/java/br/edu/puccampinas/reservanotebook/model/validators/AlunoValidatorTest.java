@@ -1,9 +1,9 @@
-package br.edu.puccampinas.reservanotebook.model.entities;
+package br.edu.puccampinas.reservanotebook.model.validators;
 
 
+import br.edu.puccampinas.reservanotebook.model.entities.Aluno;
 import br.edu.puccampinas.reservanotebook.model.entities.enums.Curso;
 import br.edu.puccampinas.reservanotebook.model.exceptions.ValidacaoException;
-import br.edu.puccampinas.reservanotebook.model.validators.AlunoValidator;
 import io.github.cdimascio.dotenv.Dotenv;
 import org.junit.jupiter.api.Test;
 
@@ -12,7 +12,7 @@ import java.time.LocalDateTime;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-public class AlunoTest {
+public class AlunoValidatorTest {
 
     private final static Dotenv dotenv = Dotenv.configure().directory("./").load();
     private final static String DOMINIO = dotenv.get("DOMINIO");

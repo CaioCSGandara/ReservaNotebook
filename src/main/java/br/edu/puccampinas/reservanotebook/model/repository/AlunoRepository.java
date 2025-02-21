@@ -53,9 +53,9 @@ public class AlunoRepository implements CRUD<Aluno> {
     }
 
     @Override
-    public void update(String query, Aluno obj) {
+    public void update(Aluno obj) {
         if(obj==null) throw new IllegalArgumentException("Parâmetro 'obj' não pode ser nulo (update).");
-        if(query.isEmpty()) throw new IllegalArgumentException("Parâmetro 'query' não pode ser nulo (update).");
+        if(findByRa(obj.getRa())==null) throw new RegistroNaoEncontradoException("RA do documento a ser alterado não encontrado.");
 
         try (MongoClient client = MongoHandler.connect()) {
             MongoDatabase db = client.getDatabase(MongoHandler.getDbName());
@@ -64,32 +64,31 @@ public class AlunoRepository implements CRUD<Aluno> {
             Bson updates = Updates.combine(
                     Updates.set("nome", obj.getNome()),
                     Updates.set("telefone", obj.getTelefone()),
-                    Updates.set("curso", obj.getCurso()),
+                    Updates.set("curso", obj.getCurso().getNomeFormatado()),
                     Updates.set("atualizadoEm", LocalDateTime.now()));
 
-            UpdateResult result = collection.updateOne(eq("ra", query), updates);
+            UpdateResult result = collection.updateOne(eq("ra", obj.getRa()), updates);
             System.out.println("Documentos encontrados: " + result.getMatchedCount() + ", documentos alterados: " + result.getModifiedCount());
-            if(result.getModifiedCount() == 0) throw new RegistroNaoEncontradoException("RA para alterar documento não encontrado.");
         }
     }
 
 
     @Override
     public void delete(String query) {
-        if(query==null) throw new IllegalArgumentException("Parâmetro 'id' (RA) não pode ser nulo (delete).");
+        if(query==null) throw new IllegalArgumentException("Parâmetro 'query' (RA) não pode ser nulo (delete).");
+        if (findByRa(query)==null) throw new RegistroNaoEncontradoException("RA para deletar documento não encontrado.");
         try (MongoClient client = MongoHandler.connect()) {
             MongoDatabase db = client.getDatabase(MongoHandler.getDbName());
             MongoCollection<Document> collection = db.getCollection("alunos");
 
             DeleteResult result = collection.deleteOne(eq("ra", query));
             System.out.println("Documentos encontrados: " + result.getDeletedCount());
-            if (result.getDeletedCount()==0) throw new RegistroNaoEncontradoException("RA para deletar documento não encontrado.");
         }
 
     }
 
     public Aluno findByRa(String ra) {
-        if(ra==null) throw new IllegalArgumentException("Parâmetro 'ra' não pode ser nulo na classe Aluno: função findByRa");
+        if(ra==null) throw new IllegalArgumentException("Parâmetro 'ra' não pode ser nulo (findByRa).");
         try (MongoClient client = MongoHandler.connect()) {
             MongoDatabase db = client.getDatabase(MongoHandler.getDbName());
             Bson excludeIdProjection = Projections.excludeId();
