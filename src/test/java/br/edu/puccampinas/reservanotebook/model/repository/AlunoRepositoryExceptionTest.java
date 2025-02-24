@@ -9,6 +9,7 @@ import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
 import io.github.cdimascio.dotenv.Dotenv;
 import org.bson.Document;
+import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -23,16 +24,19 @@ public class AlunoRepositoryExceptionTest {
 
     private final static Dotenv dotenv = Dotenv.configure().directory("./").load();
     private final static String DOMINIO = dotenv.get("DOMINIO");
-    private final static AlunoRepository alunoRepository = new AlunoRepository();
+    private final static AlunoRepository alunoRepository = AlunoRepository.getInstance();
 
 
     @BeforeEach
     public void limparBanco() {
-        try (MongoClient client = MongoHandler.connect()) {
-            MongoDatabase db = client.getDatabase("puc");
-            MongoCollection<Document> collection = db.getCollection("alunos");
+            MongoCollection<Document> collection = alunoRepository.getCollection();
             collection.drop();
-        }
+
+    }
+
+    @AfterAll
+    public static void fecharConexao() {
+        alunoRepository.getClient().close();
     }
 
 
